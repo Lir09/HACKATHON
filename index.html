@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배달의 시장 - 매장 선택</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #fafafa;
+    color: #222;
+    line-height: 1.6;
+}
+
+.header {
+    background: #ffffff;
+    border-bottom: 1px solid #eaeaea;
+    padding: 1rem 0;
+    box-shadow: none;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 600;
+    color: #111;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+}
+
+.location-selector {
+    background: #f0f0f0;
+    padding: 10px 16px;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    font-size: 1rem;
+    color: #555;
+    border: none;
+}
+
+.location-selector:hover {
+    background: #e0e0e0;
+}
+
+.main-content {
+    padding: 3rem 0;
+}
+
+.section {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
+    margin-bottom: 2.5rem;
+    overflow: hidden;
+}
+
+.section-header {
+    background: #f8f8f8;
+    color: #333;
+    padding: 1.25rem 2rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    user-select: none;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.section-content {
+    padding: 2rem;
+}
+
+.stores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.8rem;
+}
+
+.store-card {
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid #eee;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.store-card:hover {
+    box-shadow: 0 8px 20px rgb(0 0 0 / 0.08);
+    transform: translateY(-4px);
+}
+
+.store-card.featured {
+    border: 2px solid #4CAF50;
+}
+
+.store-card.featured::after {
+    content: '🔥 추천';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #4CAF50;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.store-image {
+    height: 200px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: white;
+    user-select: none;
+    position: relative;
+}
+
+.store-info {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.store-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #222;
+}
+
+.store-description {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.store-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.rating-stars {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.delivery-time {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.delivery-fee {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.btn {
+    background: linear-gradient(135deg, #757575 0%, #424242 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #616161;
+    transform: scale(1.03);
+    box-shadow: 0 8px 15px rgba(97, 97, 97, 0.5);
+}
+
+.btn-featured {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+}
+
+.btn-featured:hover {
+    background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+}
+
+.filter-section {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
+    margin-bottom: 2rem;
+    padding: 1.5rem 2rem;
+}
+
+.filter-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.filter-options {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.filter-btn:hover {
+    background: #e8e8e8;
+}
+
+.filter-btn.active {
+    background: #222;
+    color: white;
+    border-color: #222;
+}
+
+.search-section {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
+    margin-bottom: 2rem;
+    padding: 1.5rem 2rem;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    color: #222;
+}
+
+.search-input::placeholder {
+    color: #aaa;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #222;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .stores-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-options {
+        flex-direction: column;
+    }
+    
+    .filter-btn {
+        text-align: center;
+    }
+    
+    .store-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">🛒 배달의 시장</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- 검색 섹션 -->
+            <div class="search-section">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="search-input" 
+                    placeholder="🔍 매장명이나 음식 종류를 검색하세요..."
+                    oninput="filterStores()"
+                >
+            </div>
+
+            <!-- 필터 섹션 -->
+            <div class="filter-section">
+                <div class="filter-title">🏷️ 카테고리</div>
+                <div class="filter-options">
+                    <button class="filter-btn active" onclick="filterByCategory('all')">전체</button>
+                    <button class="filter-btn" onclick="filterByCategory('korean')">한식</button>
+                    <button class="filter-btn" onclick="filterByCategory('chinese')">중식</button>
+                    <button class="filter-btn" onclick="filterByCategory('western')">양식</button>
+                    <button class="filter-btn" onclick="filterByCategory('japanese')">일식</button>
+                    <button class="filter-btn" onclick="filterByCategory('fast')">패스트푸드</button>
+                    <button class="filter-btn" onclick="filterByCategory('chicken')">치킨</button>
+                    <button class="filter-btn" onclick="filterByCategory('pizza')">피자</button>
+                    <button class="filter-btn" onclick="filterByCategory('dessert')">디저트</button>
+                </div>
+            </div>
+
+            <!-- 매장 목록 섹션 -->
+            <div class="section">
+                <div class="section-header">
+                    🏪 <span id="section-title">전체 매장</span> (<span id="store-count">0</span>개)
+                </div>
+                <div class="section-content">
+                    <div class="stores-grid" id="stores-grid">
+                        <!-- 매장들이 JavaScript로 동적 생성됩니다 -->
+                    </div>
+                    
+                    <!-- 검색 결과 없을 때 표시 -->
+                    <div id="empty-state" class="empty-state" style="display: none;">
+                        <h3>🔍 검색 결과가 없습니다</h3>
+                        <p>다른 검색어를 시도해보세요</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+// 매장 데이터
+const stores = [
+    {
+        id: 1,
+        name: "맛있는 김밥천국",
+        category: "korean",
+        emoji: "🍙",
+        description: "신선한 재료로 만드는 정성스러운 김밥과 분식",
+        rating: "평가 안됨",
+        reviewCount: "없음",
+        deliveryTime: "20-30분",
+        deliveryFee: 2000,
+        featured: true,
+        gradient: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)"
+    },
+    {
+        id: 2,
+        name: "황금성 중국집",
+        category: "chinese",
+        emoji: "🍜",
+        description: "정통 중화요리의 깊은 맛을 선사하는 전문점",
+        rating: "평가 안됨",
+        reviewCount: "없음",
+        deliveryTime: "25-35분",
+        deliveryFee: 3000,
+        featured: false,
+        gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+    },
+    {
+        id: 3,
+        name: "이탈리아노 파스타",
+        category: "western",
+        emoji: "🍝",
+        description: "정통 이탈리아 셰프가 만드는 수제 파스타",
+        rating: "평가 안됨",
+        reviewCount: "없음",
+        deliveryTime: "30-40분",
+        deliveryFee: 3500,
+        featured: true,
+        gradient: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)"
+    },
+    {
+        id: 4,
+        name: "사쿠라 스시",
+        category: "japanese",
+        emoji: "🍣",
+        description: "신선한 해산물로 만드는 프리미엄 초밥",
+        rating: "평가 안됨",
+        reviewCount: "없음",
+        deliveryTime: "35-45분",
+        deliveryFee: 4000,
+        featured: false,
+        gradient: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)"
+    },
+    {
+        id: 5,
+        name: "맥버거킹",
+        category: "fast",
+        emoji: "🍔",
+        description: "빠르고 맛있는 프리미엄 버거 전문점",
+        rating: "평가 안됨",
+        reviewCount: "없음",
+        deliveryTime: "15-25분",
+        deliveryFee: 1500,
+        featured: false,
+        gradient: "linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%)"
+    },
+    {
+        id: 6,
+        name: "황금 치킨마루",
+        category: "chicken",
+        emoji: "🍗",
+        description: "바삭하고 촉촉한 프리미엄 후라이드 치킨",
+        rating: "평가 안됨",
+        reviewCount: "없음",
+        deliveryTime: "20-30분",
+        deliveryFee: 2500,
+        featured: true,
+        gradient: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)"
+    },
+    {
+        id: 7,
+        name: "피자스쿨",
+        category: "pizza",
+        emoji: "🍕",
+        description: "신선한 토핑과 쫄깃한 도우의 만남",
+        rating: "평가 안됨",
+        reviewCount: "없음",
+        deliveryTime: "25-35분",
+        deliveryFee: 3000,
+        featured: false,
+        gradient: "linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)"
+    },
+    {
+        id: 8,
+        name: "달콤 디저트카페",
+        category: "dessert",
+        emoji: "🧁",
+        description: "수제 케이크와 디저트의 달콤한 유혹",
+        rating: "평가 안됨",
+        reviewCount: "없음",
+        deliveryTime: "30-40분",
+        deliveryFee: 2500,
+        featured: false,
+        gradient: "linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)"
+    },
+    {
+        id: 9,
+        name: "백반집 고향",
+        category: "korean",
+        emoji: "🍲",
+        description: "집밥 같은 따뜻한 한식 정식",
+        rating: "평가 안됨",
+        reviewCount: "없음",
+        deliveryTime: "25-35분",
+        deliveryFee: 2000,
+        featured: false,
+        gradient: "linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)"
+    },
+    {
+        id: 10,
+        name: "라멘하우스",
+        category: "japanese",
+        emoji: "🍥",
+        description: "진한 국물이 자랑인 정통 일본 라멘",
+        rating: "평가 안됨",
+        reviewCount: "없음",
+        deliveryTime: "30-40분",
+        deliveryFee: 3500,
+        featured: false,
+        gradient: "linear-gradient(135deg, #ff9a8b 0%, #a8e6cf 100%)"
+    }
+];
+
+let filteredStores = [...stores];
+let currentCategory = 'all';
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    displayStores();
+    updateStoreCount();
+});
+
+// 매장 목록 표시
+function displayStores() {
+    const grid = document.getElementById('stores-grid');
+    const emptyState = document.getElementById('empty-state');
+    
+    if (filteredStores.length === 0) {
+        grid.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+    }
+    
+    emptyState.style.display = 'none';
+    grid.innerHTML = '';
+    
+    filteredStores.forEach(store => {
+        const storeCard = document.createElement('div');
+        storeCard.className = `store-card ${store.featured ? 'featured' : ''}`;
+        storeCard.innerHTML = `
+            <div class="store-image" style="background: ${store.gradient}">
+                ${store.emoji}
+            </div>
+            <div class="store-info">
+                <div class="store-name">${store.name}</div>
+                <div class="store-description">${store.description}</div>
+                <div class="store-meta">
+                    <div class="rating">
+                        <span class="rating-stars">⭐ ${store.rating}</span>
+                        <span>(${store.reviewCount.toLocaleString()})</span>
+                    </div>
+                    <div class="delivery-time">
+                        <span>🚚 ${store.deliveryTime}</span>
+                    </div>
+                    <div class="delivery-fee">
+                        <span>💰 ${store.deliveryFee.toLocaleString()}원</span>
+                    </div>
+                </div>
+                <button class="btn ${store.featured ? 'btn-featured' : ''}" onclick="selectStore(${store.id})">
+                    ${store.featured ? '🔥 추천매장 주문하기' : '주문하기'}
+                </button>
+            </div>
+        `;
+        grid.appendChild(storeCard);
+    });
+}
+
+// 카테고리별 필터링
+function filterByCategory(category) {
+    currentCategory = category;
+    
+    // 필터 버튼 활성화 상태 변경
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    // 매장 필터링
+    if (category === 'all') {
+        filteredStores = [...stores];
+    } else {
+        filteredStores = stores.filter(store => store.category === category);
+    }
+    
+    // 검색어도 적용
+    const searchTerm = document.getElementById('search-input').value;
+    if (searchTerm) {
+        applySearchFilter(searchTerm);
+    }
+    
+    displayStores();
+    updateStoreCount();
+    updateSectionTitle();
+}
+
+// 검색 필터링
+function filterStores() {
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    applySearchFilter(searchTerm);
+    displayStores();
+    updateStoreCount();
+}
+
+function applySearchFilter(searchTerm) {
+    if (!searchTerm) {
+        if (currentCategory === 'all') {
+            filteredStores = [...stores];
+        } else {
+            filteredStores = stores.filter(store => store.category === currentCategory);
+        }
+        return;
+    }
+    
+    let baseStores = currentCategory === 'all' ? stores : stores.filter(store => store.category === currentCategory);
+    
+    filteredStores = baseStores.filter(store => 
+        store.name.toLowerCase().includes(searchTerm) ||
+        store.description.toLowerCase().includes(searchTerm) ||
+        getCategoryName(store.category).toLowerCase().includes(searchTerm)
+    );
+}
+
+// 카테고리명 반환
+function getCategoryName(category) {
+    const categoryNames = {
+        'korean': '한식',
+        'chinese': '중식',
+        'western': '양식',
+        'japanese': '일식',
+        'fast': '패스트푸드',
+        'chicken': '치킨',
+        'pizza': '피자',
+        'dessert': '디저트'
+    };
+    return categoryNames[category] || category;
+}
+
+// 매장 수 업데이트
+function updateStoreCount() {
+    document.getElementById('store-count').textContent = filteredStores.length;
+}
+
+// 섹션 제목 업데이트
+function updateSectionTitle() {
+    const sectionTitle = document.getElementById('section-title');
+    if (currentCategory === 'all') {
+        sectionTitle.textContent = '전체 매장';
+    } else {
+        sectionTitle.textContent = getCategoryName(currentCategory) + ' 매장';
+    }
+}
+
+// 매장 선택
+function selectStore(storeId) {
+    const store = stores.find(s => s.id === storeId);
+    if (store) {
+        // shop_store{id}.html 형식으로 페이지 이동
+        const targetPage = `shop_store${storeId}.html`;
+        
+        // 실제 서비스에서는 바로 페이지 이동
+        window.location.href = targetPage;
+    }
+}
+
+    </script>
+</body>
+</html>
