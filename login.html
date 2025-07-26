@@ -215,14 +215,14 @@ body {
     accent-color: #4CAF50;
 }
 
-.forgot-password {
+.forgot_password {
     color: #4CAF50;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
-.forgot-password:hover {
+.forgot_password:hover {
     color: #45a049;
     text-decoration: underline;
 }
@@ -478,7 +478,7 @@ body {
                             <input type="checkbox" id="remember">
                             로그인 상태 유지
                         </label>
-                        <a href="#" class="forgot-password">비밀번호 찾기</a>
+                        <a href="#" class="forgot_password">비밀번호 찾기</a>
                     </div>
 
                     <button type="submit" class="login-btn" id="login-btn">
@@ -607,11 +607,16 @@ body {
             }, 2000);
         }
 
+        function forgot_password () {
+            window.location.href = 'find_password.html';
+        }
+
         // 회원가입 페이지로 이동
         function goToSignup() {
             // 실제 서비스에서는 회원가입 페이지로 이동
             window.location.href = 'signup.html';
         }
+        
 
         // 로딩 상태 시작
         function startLoading(button) {
