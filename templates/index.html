@@ -449,16 +449,21 @@
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <a href="#" class="logo">🛒 배달의 시장</a>
-                <div id="user-section">
-                    <button class="btn-login" onclick="goToLogin()">로그인</button>
-                </div>
+<header class="header">
+    <div class="container">
+        <div class="header-content">
+            <a href="/" class="logo">🛒 배달의 시장</a>
+            <div id="user-section">
+                {% if username %}
+                    <span style="font-weight:600;">👋 {{ username }}님 환영합니다!</span>
+                    <a href="/logout" class="btn-logout">로그아웃</a>
+                {% else %}
+                    <a href="/login" class="btn-login">로그인</a>
+                {% endif %}
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
     <main class="main-content">
         <div class="container">
@@ -672,16 +677,6 @@
         function goToLogin() {
             window.location.href = 'login.html';
         }
-
-// 로그인된 유저 정보 불러오기
-        window.addEventListener('DOMContentLoaded', () => {
-            const user = localStorage.getItem('username');
-            const userSection = document.getElementById('user-section');
-
-            if (user) {
-                userSection.innerHTML = `<span style="font-weight:600;">👋 ${user}님 환영합니다!</span>`;
-            }
-        });
 
         // 매장 목록 표시
         function displayStores() {
