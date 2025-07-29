@@ -453,7 +453,9 @@
         <div class="container">
             <div class="header-content">
                 <a href="#" class="logo">🛒 배달의 시장</a>
-                <button class="btn-login" onclick="goToLogin()">로그인</button>
+                <div id="user-section">
+                    <button class="btn-login" onclick="goToLogin()">로그인</button>
+                </div>
             </div>
         </div>
     </header>
@@ -670,6 +672,16 @@
         function goToLogin() {
             window.location.href = 'login.html';
         }
+
+// 로그인된 유저 정보 불러오기
+        window.addEventListener('DOMContentLoaded', () => {
+            const user = localStorage.getItem('username');
+            const userSection = document.getElementById('user-section');
+
+            if (user) {
+                userSection.innerHTML = `<span style="font-weight:600;">👋 ${user}님 환영합니다!</span>`;
+            }
+        });
 
         // 매장 목록 표시
         function displayStores() {
